@@ -99,37 +99,42 @@
         }
     </script>
 
-<script class="ScoreSystem" data-script-id="S1">
-    AFRAME.registerComponent('collectible', {
-        init: function () {
-            this.el.addEventListener('collide', (e) => {
-                if (e.detail.body.el.id === 'player') {
-                    this.el.setAttribute('visible', false);
-                    updateScore();
-                    respawnCollectible(this.el);
-                }
-            });
+<script>
+    AFRAME.registerComponent('distance-checker', {
+        schema: {
+            target: { type: 'selector' }, // Цель, с которой проверяется расстояние
+            threshold: { type: 'number', default: 1 } // Пороговое расстояние для подбора
+        },
+        tick: function () {
+            if (!this.data.target) return;
+
+            // Получаем позиции объекта и игрока
+            const objectPosition = this.el.object3D.position;
+            const playerPosition = this.data.target.object3D.position;
+
+            // Вычисляем расстояние между объектом и игроком
+            const distance = objectPosition.distanceTo(playerPosition);
+
+            // Если расстояние меньше порогового значения, удаляем объект и обновляем счет
+            if (distance < this.data.threshold) {
+                this.pickUpObject();
+            }
+        },
+        pickUpObject: function () {
+            // Удаление объекта
+            this.el.parentNode.removeChild(this.el);
+
+            // Обновление счета
+            const scoreElement = document.querySelector('#ScoreBar');
+            let score = parseInt(scoreElement.getAttribute('value').split(':')[1]) + 1;
+            scoreElement.setAttribute('value', 'Score:' + score);
         }
     });
 
-    let score = 0;
-    function updateScore() {
-        score += 1;
-        document.querySelector('#ScoreBar').setAttribute('value', 'Score: ' + score);
-    }
-
-    function respawnCollectible(collectible) {
-        const x = (Math.random() - 0.5) * 20;
-        const z = (Math.random() - 0.5) * 20;
-        collectible.setAttribute('position', { x: x, y: 1, z: z });
-        collectible.setAttribute('visible', true);
-    }
-
-    // Добавляем компонент collectible ко всем объектам с классом collidable
+    // Применяем компонент distance-checker ко всем объектам с классом collidable
     document.querySelectorAll('.collidable').forEach(el => {
-        el.setAttribute('collectible', '');
+        el.setAttribute('distance-checker', { target: '#player', threshold: 1 });
     });
 </script>
-
 </body>
 </html>
