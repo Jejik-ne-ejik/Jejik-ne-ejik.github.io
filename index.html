@@ -12,8 +12,8 @@
     <a-scene physics="debug: false">
         <!-- Окружение -->
         <a-sky color="#87ceeb"></a-sky>
-        <a-plane rotation="-90 0 0" position="0 0 0" width="40" height="40" color="#228B22"></a-plane>
-        <a-light position="0 1 1" rotation="0 0 0" color="#FFD700"></a-light>
+        <a-plane rotation="-90 0 0" position="0 0 0" width="50" height="50" color="#228B22"></a-plane>
+        <a-light position="0 2 0" rotation="0 0 0"></a-light>
 
         <!-- Контролер и камера -->
         <a-entity id="player" camera position="0 1.7 0" wasd-controls look-controls>
@@ -25,9 +25,9 @@
         <a-text id="Timer" value="Time:60" position="0 2.3 -2" color="black"></a-text>
 
         <!-- Обьекты -->
-        <a-box position="6 1 13" rotation="0 45 45" color="#2E8B57" class="collidable"></a-box>
-        <a-sphere position="9.7 1 -2" rotation="45 0 45" color="#4B0082" radius="0.2" class="collidable"></a-sphere>
-        <a-cylinder position="-10.3 1 -14" rotation="90 30 0" color="#FF1493" height="1.7" class="collidable"></a-cylinder>
+        <a-torus position="6 1 13" rotation="0 45 45" color="#D406B1" class="collidable"></a-torus>
+        <a-sphere position="8 1 -2" rotation="45 0 45" color="#f00717" radius="0.5" class="collidable"></a-sphere>
+        <a-cylinder position="-10 1 -14" rotation="90 30 0" color="#0e0bd9" height="2" class="collidable"></a-cylinder>
     </a-scene>
 
     <script class="Movement" data-script-id="M1">
