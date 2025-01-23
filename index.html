@@ -99,23 +99,42 @@
         }
     </script>
 
-<script>
-    AFRAME.registerComponent('collectible', {
-        init: function () {
-            this.el.addEventListener('collide', (e) => {
-                if (e.detail.body.el.id === 'player') {
-                    // Удаление объекта
-                    this.el.parentNode.removeChild(this.el);
+    <script class="ScoreSystem" data-script-id="S1">
+        AFRAME.registerComponent('collectible', {
+            init: function () {
+                this.el.addEventListener('collide', (e) => {
+                    if (e.detail.body.el.id === 'player') {
+                        this.el.setAttribute('visible', false);
+                        updateScore();
+                        respawnCollectible(this.el);
+                    }
+                });
 
-                    // Обновление счета
-                    let scoreElement = document.querySelector('#ScoreBar');
-                    let score = parseInt(scoreElement.getAttribute('value').split(': ')[1]) + 1;
-                    scoreElement.setAttribute('value', 'Score: ' + score);
-                }
-            });
+                this.el.addEventListener('click', () => {
+                    this.el.setAttribute('visible', false);
+                    updateScore();
+                    respawnCollectible(this.el);
+                });
+            }
+        });
+
+        let score = 0;
+        function updateScore() {
+            score += 1;
+            document.querySelector('#ScoreBar').setAttribute('value', 'Score: ' + score);
         }
-    });
-</script>
 
+        function respawnCollectible(collectible) {
+            const x = (Math.random() - 0.5) * 20;
+            const z = (Math.random() - 0.5) * 20;
+            collectible.setAttribute('position', { x: x, y: 1, z: z });
+            collectible.setAttribute('visible', true);
+        }
+
+        // Добавляем компонент collectible ко всем объектам с классом collidable
+        document.querySelectorAll('.collidable').forEach(el => {
+            el.setAttribute('collectible', '');
+        });
+    </script>
 </body>
 </html>
